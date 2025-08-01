@@ -1,0 +1,52 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "appreciationapp-prod",
+          "appId": "1:383763116692:android:452324b501a7f5864dfa81",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "appreciationapp-prod",
+          "configurations": {
+            "android": "1:383763116692:android:452324b501a7f5864dfa81",
+            "ios": "1:383763116692:ios:255f70858b8cac814dfa81",
+            "macos": "1:383763116692:ios:255f70858b8cac814dfa81",
+            "web": "1:383763116692:web:4cb9bd5831173f3f4dfa81",
+            "windows": "1:383763116692:web:cc3d0e9f3eda6b634dfa81"
+          }
+        }
+      }
+    }
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
+  "hosting": {
+    "public": "build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

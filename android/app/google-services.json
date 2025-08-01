@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "383763116692",
+    "project_id": "appreciationapp-prod",
+    "storage_bucket": "appreciationapp-prod.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:383763116692:android:452324b501a7f5864dfa81",
+        "android_client_info": {
+          "package_name": "com.example.appreciation_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCRqspSSCxvZBe1Bdie0X39aJanXfUVwHo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
