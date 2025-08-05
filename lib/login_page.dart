@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:appreciation_app/fcm_helper.dart';
@@ -17,19 +18,52 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> signIn() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      final userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: _emailController.text.trim().toLowerCase(),
         password: _passwordController.text.trim(),
       );
 
+      final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(userCredential.user!.uid)
+        .get();
+
+    // Step 3: Check if the user document exists and what their status is.
+      if (userDoc.exists) {
+        final userData = userDoc.data() as Map<String, dynamic>;
+        if (userData['status'] == 'inactive') {
+          // Step 4a: If inactive, sign them out immediately and show an error.
+          await FirebaseAuth.instance.signOut();
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Your account has been deactivated. Please contact an administrator.')),
+            );
+          }
+          return; // Stop the function here.
+        }
+      } else {
+        // This is an edge case where a user exists in Auth but not in our database.
+        // Signing them out is the safest option.
+        await FirebaseAuth.instance.signOut();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Your user record could not be found. Please contact an administrator.')),
+          );
+        }
+        return;
+      }
+
+      // Step 4b: If they are active, save their FCM token (your existing code)
+      // and let the AuthGate navigate them to the correct page.
       await FcmHelper.saveTokenToFirestore();
       
     } on FirebaseAuthException catch (e) {
-      if (!mounted) return; // <-- ADD THIS LINE
-      // Show an error message to the user
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in: ${e.message}')),
-      );
+      if (mounted) {
+        // Your existing error handling for wrong password, user not found, etc.
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to sign in: ${e.message}')),
+        );
+      }
     }
   }
 

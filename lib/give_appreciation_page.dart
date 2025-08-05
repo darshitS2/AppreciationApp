@@ -33,13 +33,16 @@ class _GiveAppreciationPageState extends State<GiveAppreciationPage> {
   Future<void> _fetchUsers() async {
     try {
       final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('status', isEqualTo: 'active')
+          .where('role', isEqualTo: 'employee')
           .get();
       
       final usersData = snapshot.docs
-          .where((doc) => doc.id != currentUserId)
+          .where((doc) => doc.data().containsKey('uid')) 
+          .where((doc) => doc.data()['uid'] != currentUserId) 
           .map((doc) => AppUser(
                 id: doc.id,
                 fullName: doc['fullName'],
@@ -289,10 +292,12 @@ class _GiveAppreciationPageState extends State<GiveAppreciationPage> {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
           .where('status', isEqualTo: 'active')
+          .where('role', isEqualTo: 'employee')
           .get();
       
       final usersData = snapshot.docs
-          .where((doc) => doc.id != currentUserId)
+          .where((doc) => doc.data().containsKey('uid')) 
+          .where((doc) => doc.data()['uid'] != currentUserId) 
           .map((doc) => AppUser(
                 id: doc.id,
                 fullName: doc['fullName'],

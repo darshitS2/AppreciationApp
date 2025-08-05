@@ -1,11 +1,10 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shimmer/shimmer.dart';
 import 'firebase_options.dart';
-import 'auth_gate.dart'; // Import our new AuthGate
+import 'auth_gate.dart'; 
 import 'give_appreciation_page.dart';
 import 'appreciation_post.dart';
 import 'package:intl/intl.dart'; // We'll use this to format the date
@@ -117,16 +116,16 @@ class _AppreciationFeedState extends State<AppreciationFeed> {
             itemBuilder: (context, index) {
               // Get the specific appreciation document
               final appreciation = appreciations[index];
+              final data = appreciation.data() as Map<String, dynamic>;
               final postId = appreciation.id;
 
               // Get the data from the appreciation document
-              final fromUid = appreciation['from_uid'] as String;
-              final toUid = appreciation['to_uid'] as String;
-              final message = appreciation['message'] as String;
+              final fromUid = data['from_uid'] as String? ?? 'unknown';
+              final toUid = data['to_uid'] as String? ?? 'unknown';
+              final message = data['message'] as String? ?? 'No message.';
               final value = appreciation.data().toString().contains('value') ? appreciation.get('value') as String : 'General';
               final timestamp = appreciation.data().toString().contains('timestamp') 
-                ? appreciation.get('timestamp') as Timestamp 
-                : Timestamp.now(); // Provide a default value if it's missing
+                ? appreciation.get('timestamp') as Timestamp : Timestamp.now(); // Provide a default value if it's missing
               final formattedTime = DateFormat('MMM d, yyyy - hh:mm a').format(timestamp.toDate());
 
               // Now, we need to find the full name of the user who sent this
@@ -137,13 +136,44 @@ class _AppreciationFeedState extends State<AppreciationFeed> {
                   FirebaseFirestore.instance.collection('users').doc(toUid).get(),
                 ]),
                 builder: (context, userSnapshots) {
-                  if (!userSnapshots.hasData) {
-                    return Container(height: 100, margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16), color: Colors.white);
+                  if (userSnapshots.connectionState == ConnectionState.waiting) {
+                    return Container(
+                      height: 150,
+                      padding: const EdgeInsets.all(16),
+                      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    );
                   }
+                  
+                  String fromUserName = "Unknown User";
+                  String toUserName = "Unknown User";
 
-                  // We found the users! Get their full names.
-                  final fromUserName = userSnapshots.data![0]['fullName'] as String;
-                  final toUserName = userSnapshots.data![1]['fullName'] as String;
+                  // If the data is loaded and not null...
+                  if (userSnapshots.hasData && userSnapshots.data != null) {
+                    // Check if the 'from' user document EXISTS before trying to get data from it
+                    if (userSnapshots.data![0].exists) {
+                      final fromData = userSnapshots.data![0].data() as Map<String, dynamic>?;
+                      final fromStatus = fromData?['status'] ?? 'active';
+                      fromUserName = fromData?['fullName'] ?? 'Unknown User';
+                      // Append a label if the user is inactive
+                      if (fromStatus == 'inactive') {
+                        fromUserName += " (Inactive)";
+                      }
+                    }
+                    // Check if the 'to' user document EXISTS
+                    if (userSnapshots.data![1].exists) {
+                      final toData = userSnapshots.data![1].data() as Map<String, dynamic>?;
+                      final toStatus = toData?['status'] ?? 'active';
+                      toUserName = toData?['fullName'] ?? 'Unknown User';
+                      // Append a label if the user is inactive
+                      if (toStatus == 'inactive') {
+                        toUserName += " (Inactive)";
+                      }
+                    }
+                  }
 
                   // Use our new, beautiful AppreciationPost widget
                   return AppreciationPost(
