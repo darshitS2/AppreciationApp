@@ -1,6 +1,6 @@
 {
-    "name": "appreciation_app",
-    "short_name": "appreciation_app",
+    "name": "Appreciation App",
+    "short_name": "Appreciation App",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

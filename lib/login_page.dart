@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:appreciation_app/fcm_helper.dart';
 
 class LoginPage extends StatefulWidget {
   final VoidCallback showSignUpPage;
@@ -52,10 +51,6 @@ class _LoginPageState extends State<LoginPage> {
         }
         return;
       }
-
-      // Step 4b: If they are active, save their FCM token (your existing code)
-      // and let the AuthGate navigate them to the correct page.
-      await FcmHelper.saveTokenToFirestore();
       
     } on FirebaseAuthException catch (e) {
       if (mounted) {

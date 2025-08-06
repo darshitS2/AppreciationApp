@@ -40,11 +40,11 @@ dependencies:
   intl: ^0.20.2
   shimmer: ^3.0.0
   dropdown_search: ^6.0.2
-  firebase_messaging: ^15.2.8
   csv: ^6.0.0
   path_provider: ^2.1.5
   share_plus: ^11.0.0
   universal_html: ^2.2.4
+  flutter_launcher_icons: ^0.14.4
 
 dev_dependencies:
   flutter_test:
@@ -98,3 +98,10 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
+flutter_launcher_icons:
+  android: "launcher_icon"    # The name of the icon file
+  ios: true                   # Generate for iOS
+  image_path: "assets/launcher_icon/icon.png" # The path to your master icon
+  web:
+    generate: true            # Generate for Web (favicon)
+    image_path: "assets/launcher_icon/icon.png"

@@ -10,14 +10,12 @@ import 'appreciation_post.dart';
 import 'package:intl/intl.dart'; // We'll use this to format the date
 import 'profile_page.dart';
 import 'notification_bell.dart';
-import 'fcm_helper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  await FcmHelper.initialize();
 
   runApp(const AppreciationApp());
 }

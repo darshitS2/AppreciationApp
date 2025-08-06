@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:appreciation_app/fcm_helper.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback showLoginPage;
@@ -90,9 +89,6 @@ class _SignUpPageState extends State<SignUpPage> {
           
       // Finally, delete the original, temporary pre-registered document.
       await preRegisteredUserDoc.reference.delete();
-      
-      // After a successful sign-up and document creation, save the device token.
-      await FcmHelper.saveTokenToFirestore();
 
       // The user will now be logged in, and the AuthGate will successfully find their document.
 
