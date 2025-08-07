@@ -202,6 +202,12 @@ class _AdminManageUsersPageState extends State<AdminManageUsersPage> {
                   }).toList();
                 }
 
+                filteredUsers.sort((a, b) {
+                  final nameA = (a.data() as Map<String, dynamic>)['fullName'] as String? ?? '';
+                  final nameB = (b.data() as Map<String, dynamic>)['fullName'] as String? ?? '';
+                  return nameA.toLowerCase().compareTo(nameB.toLowerCase());
+                });
+
                 return ListView.builder(
                   itemCount: filteredUsers.length,
                   itemBuilder: (context, index) {

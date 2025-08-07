@@ -49,6 +49,8 @@ class _GiveAppreciationPageState extends State<GiveAppreciationPage> {
               ))
           .toList();
 
+      usersData.sort((a, b) => a.fullName.toLowerCase().compareTo(b.fullName.toLowerCase()));
+
       setState(() {
         _users = usersData;
         _isLoadingUsers = false;
