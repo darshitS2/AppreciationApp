@@ -36,90 +36,90 @@ class _AdminManageUsersPageState extends State<AdminManageUsersPage> {
     super.dispose();
   }
 
+  Future<void> _showFilterDialog() async {
+    // These will hold the temporary selections within the dialog
+    String tempStatus = _selectedStatus;
+    String tempRole = _selectedRole;
+
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setDialogState) {
+            return AlertDialog(
+              title: const Text('Filter Users'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text("Filter by Status", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Row(
+                    children: [
+                      ChoiceChip(
+                        label: const Text('Active'),
+                        selected: tempStatus == 'active',
+                        onSelected: (selected) => setDialogState(() => tempStatus = 'active'),
+                      ),
+                      const SizedBox(width: 8),
+                      ChoiceChip(
+                        label: const Text('Inactive'),
+                        selected: tempStatus == 'inactive',
+                        onSelected: (selected) => setDialogState(() => tempStatus = 'inactive'),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Text("Filter by Role", style: TextStyle(fontWeight: FontWeight.bold)),
+                  Wrap( // Use Wrap to handle different screen sizes gracefully
+                    spacing: 8.0,
+                    children: [
+                      ChoiceChip(
+                        label: const Text('All'),
+                        selected: tempRole == 'all',
+                        onSelected: (selected) => setDialogState(() => tempRole = 'all'),
+                      ),
+                      ChoiceChip(
+                        label: const Text('Admin'),
+                        selected: tempRole == 'admin',
+                        onSelected: (selected) => setDialogState(() => tempRole = 'admin'),
+                      ),
+                      ChoiceChip(
+                        label: const Text('Employee'),
+                        selected: tempRole == 'employee',
+                        onSelected: (selected) => setDialogState(() => tempRole = 'employee'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    // Apply the changes to the main page's state
+                    setState(() {
+                      _selectedStatus = tempStatus;
+                      _selectedRole = tempRole;
+                    });
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Apply'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
   // We will build the UI and logic in the build method next.
   @override
   Widget build(BuildContext context) {
     // ---- THIS IS THE NEW FILTER DIALOG METHOD ----
-    Future<void> _showFilterDialog() async {
-      // These will hold the temporary selections within the dialog
-      String tempStatus = _selectedStatus;
-      String tempRole = _selectedRole;
-
-      await showDialog(
-        context: context,
-        builder: (context) {
-          return StatefulBuilder(
-            builder: (context, setDialogState) {
-              return AlertDialog(
-                title: const Text('Filter Users'),
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text("Filter by Status", style: TextStyle(fontWeight: FontWeight.bold)),
-                    Row(
-                      children: [
-                        ChoiceChip(
-                          label: const Text('Active'),
-                          selected: tempStatus == 'active',
-                          onSelected: (selected) => setDialogState(() => tempStatus = 'active'),
-                        ),
-                        const SizedBox(width: 8),
-                        ChoiceChip(
-                          label: const Text('Inactive'),
-                          selected: tempStatus == 'inactive',
-                          onSelected: (selected) => setDialogState(() => tempStatus = 'inactive'),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 16),
-                    const Text("Filter by Role", style: TextStyle(fontWeight: FontWeight.bold)),
-                    Wrap( // Use Wrap to handle different screen sizes gracefully
-                      spacing: 8.0,
-                      children: [
-                        ChoiceChip(
-                          label: const Text('All'),
-                          selected: tempRole == 'all',
-                          onSelected: (selected) => setDialogState(() => tempRole = 'all'),
-                        ),
-                        ChoiceChip(
-                          label: const Text('Admin'),
-                          selected: tempRole == 'admin',
-                          onSelected: (selected) => setDialogState(() => tempRole = 'admin'),
-                        ),
-                        ChoiceChip(
-                          label: const Text('Employee'),
-                          selected: tempRole == 'employee',
-                          onSelected: (selected) => setDialogState(() => tempRole = 'employee'),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('Cancel'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Apply the changes to the main page's state
-                      setState(() {
-                        _selectedStatus = tempStatus;
-                        _selectedRole = tempRole;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Apply'),
-                  ),
-                ],
-              );
-            },
-          );
-        },
-      );
-    }
-    // ---------------------------------------------
 
     return Scaffold(
       appBar: AppBar(

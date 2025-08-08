@@ -149,7 +149,7 @@ class _GiveAppreciationPageState extends State<GiveAppreciationPage> {
                           return Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             decoration: BoxDecoration(
-                              color: isSelected ? Theme.of(context).primaryColor.withOpacity(0.1) : null,
+                              color: isSelected ? Theme.of(context).primaryColor.withAlpha(25) : null,
                             ),
                             child: Row(
                               children: [

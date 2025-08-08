@@ -82,7 +82,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
               final isRead = data['isRead'] ?? true; 
 
               return Container(
-                color: isRead ? Colors.transparent : Colors.blue.withOpacity(0.05),
+                color: isRead ? Colors.transparent : Colors.blue.withAlpha(13),
                 child: ListTile(
                   leading: Icon(
                     Icons.notifications,
